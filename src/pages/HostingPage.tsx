@@ -10,7 +10,11 @@ import {Colors, Font} from '../styles';
 import Animated, {FadeIn} from 'react-native-reanimated';
 import {FontAwesome5} from '@expo/vector-icons';
 
-export default function HostingPage() {
+interface HostingPageProps {
+  handleNextPage: () => void;
+}
+
+export default function HostingPage({handleNextPage}: HostingPageProps) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.titleContainer}>
@@ -23,7 +27,7 @@ export default function HostingPage() {
         style={styles.buttonContainer}
       >
         <Text style={styles.buttonTitle}>MEET THE COMPETITORS</Text>
-        <TouchableOpacity activeOpacity={0.4}>
+        <TouchableOpacity onPress={handleNextPage} activeOpacity={0.4}>
           <View style={styles.circleView}>
             <FontAwesome5
               name="chevron-right"
@@ -78,5 +82,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.WHITE,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingLeft: 5,
   },
 });

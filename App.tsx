@@ -1,5 +1,4 @@
 import React from 'react';
-import PagerView from 'react-native-pager-view';
 import {
   useFonts,
   Rubik_400Regular,
@@ -8,7 +7,7 @@ import {
   Rubik_700Bold,
 } from '@expo-google-fonts/rubik';
 import {StatusBar} from 'expo-status-bar';
-import HostingPage from './src/pages/HostingPage';
+import HomePage from './src/pages/HomePage';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -22,9 +21,7 @@ export default function App() {
 
   return (
     <>
-      <PagerView style={{flex: 1}}>
-        <HostingPage />
-      </PagerView>
+      <HomePage />
       <StatusBar style="light" />
     </>
   );
