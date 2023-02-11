@@ -29,11 +29,7 @@ export default function HostingPage({handleNextPage}: HostingPageProps) {
         <Text style={styles.buttonTitle}>MEET THE COMPETITORS</Text>
         <TouchableOpacity onPress={handleNextPage} activeOpacity={0.4}>
           <View style={styles.circleView}>
-            <FontAwesome5
-              name="chevron-right"
-              size={40}
-              color={Colors.BACKGROUND}
-            />
+            <FontAwesome5 name="chevron-right" size={40} color={Colors.WHITE} />
           </View>
         </TouchableOpacity>
       </Animated.View>
@@ -79,8 +75,9 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: Colors.WHITE,
+    backgroundColor: Colors.BUTTON,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingLeft: 5,
   },
 });

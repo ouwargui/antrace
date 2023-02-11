@@ -8,4 +8,5 @@ export enum Font {
 export enum Colors {
   BACKGROUND = '#232323',
   WHITE = '#FFFFFF',
+  BUTTON = '#566068',
 }

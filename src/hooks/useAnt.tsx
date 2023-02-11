@@ -9,7 +9,6 @@ export function useAnts() {
     const response = await fetch('https://sg-ants-test.herokuapp.com/ants');
     const data = (await response.json()) as Response;
     setAnts(data.ants);
-    console.log('carregando formigas');
   }
 
   useEffect(() => {
