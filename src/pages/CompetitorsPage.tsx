@@ -1,5 +1,12 @@
 import React, {useCallback} from 'react';
-import {Text, StyleSheet, View, FlatList, TouchableOpacity} from 'react-native';
+import {
+  Text,
+  StyleSheet,
+  View,
+  FlatList,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import AntListItem from '../components/AntListItem';
 import {useAnts} from '../hooks/useAnt';
@@ -8,7 +15,11 @@ import {Colors, Font} from '../styles';
 
 export default function CompetitorsPage() {
   const insets = useSafeAreaInsets();
-  const ants = useAnts();
+  const {ants, isCalculating, calculateAntWinProbability} = useAnts();
+
+  const handleStartRace = useCallback(() => {
+    calculateAntWinProbability();
+  }, [calculateAntWinProbability]);
 
   const renderItem = useCallback(
     ({item}: {item: Ant}) => <AntListItem {...item} />,
@@ -35,27 +46,49 @@ export default function CompetitorsPage() {
 
   const renderFooter = useCallback(
     () => (
-      <TouchableOpacity activeOpacity={0.4} style={styles.startButton}>
-        <Text
-          style={{
-            fontSize: 22,
-            color: Colors.WHITE,
-            fontFamily: Font.BOLD,
-          }}
-        >
-          START RACE
-        </Text>
+      <TouchableOpacity
+        disabled={isCalculating}
+        onPress={handleStartRace}
+        activeOpacity={0.4}
+        style={styles.startButton}
+      >
+        {isCalculating ? (
+          <ActivityIndicator size={20} />
+        ) : (
+          <Text
+            style={{
+              fontSize: 22,
+              color: Colors.WHITE,
+              fontFamily: Font.BOLD,
+            }}
+          >
+            START RACE
+          </Text>
+        )}
       </TouchableOpacity>
     ),
-    [],
+    [isCalculating, handleStartRace],
   );
+
+  const sortAnts = (a: Ant, b: Ant) => {
+    if (a.probability && b.probability) {
+      return b.probability - a.probability;
+    }
+    if (a.probability) {
+      return -1;
+    }
+    if (b.probability) {
+      return 1;
+    }
+    return 0;
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.listContainer}>
         <FlatList
           keyExtractor={(ant) => ant.name}
-          data={ants}
+          data={ants?.sort(sortAnts)}
           ListHeaderComponent={renderHeader}
           renderItem={renderItem}
           ItemSeparatorComponent={renderSeparator}

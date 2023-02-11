@@ -4,7 +4,14 @@ import {Ant} from '../models/Ant';
 import {Colors, Font} from '../styles';
 import ant from '../../assets/ant_uncut-removebg-preview.png';
 
-export default function AntListItem({color, length, name, weight}: Ant) {
+export default function AntListItem({
+  color,
+  length,
+  name,
+  weight,
+  probability,
+  state,
+}: Ant) {
   return (
     <View style={styles.container}>
       <View style={[styles.circleView, {backgroundColor: color.toLowerCase()}]}>
@@ -19,7 +26,13 @@ export default function AntListItem({color, length, name, weight}: Ant) {
         <Text style={styles.antDetailsText}>Weigth: {weight}</Text>
       </View>
       <View style={styles.probabilityContainer}>
-        <Text style={styles.probabilityText}>80%</Text>
+        {probability ? (
+          <Text style={styles.probabilityText}>{`${(probability * 100).toFixed(
+            0,
+          )}%`}</Text>
+        ) : (
+          <Text style={styles.notCalculatedText}>{state}</Text>
+        )}
       </View>
     </View>
   );
@@ -61,10 +74,16 @@ const styles = StyleSheet.create({
   probabilityContainer: {
     justifyContent: 'center',
     alignItems: 'flex-end',
+    width: '25%',
   },
   probabilityText: {
     fontFamily: Font.BOLD,
     color: Colors.WHITE,
     fontSize: 28,
+  },
+  notCalculatedText: {
+    fontFamily: Font.BOLD,
+    color: Colors.WHITE,
+    fontSize: 12,
   },
 });
