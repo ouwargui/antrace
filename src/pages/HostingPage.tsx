@@ -82,6 +82,5 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.WHITE,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingLeft: 5,
   },
 });

@@ -20,8 +20,8 @@ export default function HomePage() {
       ref={pagerRef}
       style={{flex: 1}}
     >
-      <HostingPage handleNextPage={handlePageChange} />
-      <CompetitorsPage />
+      <HostingPage key="1" handleNextPage={handlePageChange} />
+      <CompetitorsPage key="2" />
     </PagerView>
   );
 }
