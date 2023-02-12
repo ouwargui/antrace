@@ -3,6 +3,7 @@ import {
   Text,
   StyleSheet,
   View,
+  LayoutAnimation,
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
@@ -71,6 +72,7 @@ export default function CompetitorsPage() {
   );
 
   const sortAnts = (a: Ant, b: Ant) => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
     if (a.probability && b.probability) {
       return b.probability - a.probability;
     }

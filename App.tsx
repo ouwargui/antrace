@@ -9,6 +9,13 @@ import {
 import {StatusBar} from 'expo-status-bar';
 import HomePage from './src/pages/HomePage';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {Platform, UIManager} from 'react-native';
+
+if (Platform.OS === 'android') {
+  if (UIManager.setLayoutAnimationEnabledExperimental) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+  }
+}
 
 export default function App() {
   const [fontsLoaded] = useFonts({
