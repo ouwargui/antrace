@@ -3,11 +3,10 @@ import {
   Text,
   StyleSheet,
   View,
-  LayoutAnimation,
-  FlatList,
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
+import Animated, {Layout} from 'react-native-reanimated';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import AntListItem from '../components/AntListItem';
 import {useAnts} from '../hooks/useAnt';
@@ -16,11 +15,22 @@ import {Colors, Font} from '../styles';
 
 export default function CompetitorsPage() {
   const insets = useSafeAreaInsets();
-  const {ants, isCalculating, calculateAntWinProbability} = useAnts();
+  const {ants, isCalculating, finishedCalculating, calculateAntWinProbability} =
+    useAnts();
 
   const handleStartRace = useCallback(() => {
     calculateAntWinProbability();
   }, [calculateAntWinProbability]);
+
+  const getCalculationStatus = useCallback(() => {
+    if (isCalculating) {
+      return 'Calculating...';
+    }
+    if (finishedCalculating) {
+      return 'Finished';
+    }
+    return 'Not calculated';
+  }, [finishedCalculating, isCalculating]);
 
   const renderItem = useCallback(
     ({item}: {item: Ant}) => <AntListItem {...item} />,
@@ -47,32 +57,36 @@ export default function CompetitorsPage() {
 
   const renderFooter = useCallback(
     () => (
-      <TouchableOpacity
-        disabled={isCalculating}
-        onPress={handleStartRace}
-        activeOpacity={0.4}
-        style={styles.startButton}
-      >
-        {isCalculating ? (
-          <ActivityIndicator size={20} />
-        ) : (
-          <Text
-            style={{
-              fontSize: 22,
-              color: Colors.WHITE,
-              fontFamily: Font.BOLD,
-            }}
-          >
-            START RACE
-          </Text>
-        )}
-      </TouchableOpacity>
+      <>
+        <Text style={styles.calculationStatus}>
+          Calculation status: {getCalculationStatus()}
+        </Text>
+        <TouchableOpacity
+          disabled={isCalculating}
+          onPress={handleStartRace}
+          activeOpacity={0.4}
+          style={styles.startButton}
+        >
+          {isCalculating ? (
+            <ActivityIndicator size={20} />
+          ) : (
+            <Text
+              style={{
+                fontSize: 22,
+                color: Colors.WHITE,
+                fontFamily: Font.BOLD,
+              }}
+            >
+              START RACE
+            </Text>
+          )}
+        </TouchableOpacity>
+      </>
     ),
-    [isCalculating, handleStartRace],
+    [getCalculationStatus, isCalculating, handleStartRace],
   );
 
   const sortAnts = (a: Ant, b: Ant) => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
     if (a.probability && b.probability) {
       return b.probability - a.probability;
     }
@@ -88,7 +102,9 @@ export default function CompetitorsPage() {
   return (
     <View style={styles.container}>
       <View style={styles.listContainer}>
-        <FlatList
+        <Animated.FlatList
+          // Not working on android atm
+          itemLayoutAnimation={Layout.springify()}
           keyExtractor={(ant) => ant.name}
           data={ants?.sort(sortAnts)}
           ListHeaderComponent={renderHeader}
@@ -119,7 +135,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   startButton: {
-    marginVertical: 30,
+    marginBottom: 30,
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
@@ -135,5 +151,12 @@ const styles = StyleSheet.create({
   headerDescription: {
     color: Colors.WHITE,
     fontFamily: Font.SEMIBOLD,
+  },
+  calculationStatus: {
+    color: Colors.WHITE,
+    fontFamily: Font.SEMIBOLD,
+    fontSize: 14,
+    marginVertical: 20,
+    marginHorizontal: 10,
   },
 });

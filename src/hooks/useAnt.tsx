@@ -8,6 +8,7 @@ export function useAnts() {
   const [ants, setAnts] = useState<Ant[]>();
   const [antsCalculated, setAntsCalculated] = useState(0);
   const [isCalculating, setIsCalculating] = useState(false);
+  const [finishedCalculating, setFinishedCalculating] = useState(false);
 
   async function loadAnts() {
     const response = await fetch('https://sg-ants-test.herokuapp.com/ants');
@@ -24,6 +25,7 @@ export function useAnts() {
 
   function calculateAntWinProbability() {
     setIsCalculating(true);
+    setFinishedCalculating(false);
     const newAnts = firstAnts?.map((ant) => {
       const callback = (probability: number) => {
         setAnts((oldAnts) => {
@@ -54,6 +56,7 @@ export function useAnts() {
     if (antsCalculated === ants?.length) {
       setIsCalculating(false);
       setAntsCalculated(0);
+      setFinishedCalculating(true);
     }
   }, [ants, antsCalculated]);
 
@@ -61,5 +64,5 @@ export function useAnts() {
     void loadAnts();
   }, []);
 
-  return {ants, isCalculating, calculateAntWinProbability};
+  return {ants, isCalculating, finishedCalculating, calculateAntWinProbability};
 }
