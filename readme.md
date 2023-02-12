@@ -19,3 +19,4 @@ If you wish to run the application on a phsyical device, you'll need to download
 3. Run `npm start` to fire up the server and scan the QR Code that showed up on your terminal
 
 ## Demo
+https://user-images.githubusercontent.com/44242141/218288657-febb3b98-74c2-4bb6-9774-dfe48bcbcbaf.mp4
